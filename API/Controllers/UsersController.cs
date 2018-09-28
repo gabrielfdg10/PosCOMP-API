@@ -11,7 +11,6 @@ namespace API.Controllers
 {
     public class UsersController : ApiController
 	{
-		private static List<User> users = new List<User>();
 		
 		[HttpGet]
 		[Route("api/users/getUsers")]
