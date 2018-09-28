@@ -14,6 +14,7 @@ namespace API.Controllers
 		private static List<User> users = new List<User>();
 		
 		[HttpGet]
+		[Route("api/users/getUsers")]
 		public List <User> getUsers()
 		{
 			List<User> results = new List<User>();
@@ -27,33 +28,104 @@ namespace API.Controllers
 			}
 			catch (MySql.Data.MySqlClient.MySqlException ex)
 			{
-				results.Add(new User(-1, null, null, ex.ToString()));
+				Console.WriteLine(ex);
 			}
 			MySqlDataReader fetch= query.ExecuteReader();
 			while (fetch.Read())
 			{
-				results.Add(new User(Int32.Parse(fetch["id"].ToString()), fetch["username"].ToString(), fetch["password"].ToString(), null));
+				results.Add(new User(Int32.Parse(fetch["id"].ToString()), fetch["member_since"].ToString(), 
+									fetch["username"].ToString(), fetch["email"].ToString(), 
+									fetch["password"].ToString(), fetch["real_name"].ToString(),
+									fetch["institution"].ToString()));
+			}
+			return results;
+		}
+
+		[HttpGet]
+		[Route("api/users/logInUser/{username}/{password}")]
+		public List <User> logInUser(string username, string password)
+		{
+
+			List<User> results = new List<User>();
+			MySqlConnection conn = WebApiConfig.conn();
+			MySqlCommand query = conn.CreateCommand();
+			query.CommandText = "SELECT * from USER where username = @username and password = @password";
+			query.Parameters.AddWithValue("@username", username);
+			query.Parameters.AddWithValue("@password", password);
+
+			try
+			{
+				conn.Open();
+			}
+			catch (MySql.Data.MySqlClient.MySqlException ex)
+			{
+				Console.WriteLine(ex);
+			}
+			MySqlDataReader fetch = query.ExecuteReader();
+			while (fetch.Read())
+			{
+				results.Add(new User(Int32.Parse(fetch["id"].ToString()), fetch["member_since"].ToString(),
+									fetch["username"].ToString(), fetch["email"].ToString(),
+									fetch["password"].ToString(), fetch["real_name"].ToString(),
+									fetch["institution"].ToString()));
 			}
 			return results;
 		}
 
 		[HttpPost]
-		public IHttpActionResult insertUser([FromBody] User user)
+		[Route("api/users/newUser")]
+		public IHttpActionResult newUser([FromBody] User user)
 		{
-			if(user != null && user.userName != null && user.passWord != null)
-			{
-				users.Add(new User(user.id, user.userName, user.passWord, null));
-				return Ok();	
-			}
-			return BadRequest();	
+			MySqlConnection conn = WebApiConfig.conn();
+			MySqlCommand query = conn.CreateCommand();
+			conn.Open();
 
+			query.CommandText = "INSERT into USER (member_since, username, email, password, real_name, institution) values (@member_since, @username, @email, @password, @real_name, @institution);";
+			query.Parameters.AddWithValue("@member_since", user.member_since);
+			query.Parameters.AddWithValue("@username", user.username);
+			query.Parameters.AddWithValue("@email", user.email);
+			query.Parameters.AddWithValue("@password", user.password);
+			query.Parameters.AddWithValue("@real_name", user.real_name);
+			query.Parameters.AddWithValue("@institution", user.institution);
+			try
+			{
+				query.ExecuteNonQuery();
+				conn.Close();
+
+				return Ok();
+
+			}
+			catch (MySql.Data.MySqlClient.MySqlException ex)
+			{
+				conn.Close();
+				return BadRequest();
+
+			}
 		}
+
+
 		[HttpDelete]
+		[Route("api/users/deleteUser")]
 		public IHttpActionResult deleteUser(int id)
 		{
-			
-			users.RemoveAt(users.IndexOf(users.First(x => x.id == id)));
-			return Ok();
+			MySqlConnection conn = WebApiConfig.conn();
+			MySqlCommand query = conn.CreateCommand();
+			conn.Open();
+
+			query.CommandText = "DELETE FROM USER WHERE id = @id";
+			query.Parameters.AddWithValue("@id", id);
+			try
+			{
+				query.ExecuteNonQuery();
+				conn.Close();
+				return Ok();
+			}
+			catch (MySql.Data.MySqlClient.MySqlException ex)
+			{
+				conn.Close();
+				return BadRequest();
+			}
+
 		}
 	}
 }
