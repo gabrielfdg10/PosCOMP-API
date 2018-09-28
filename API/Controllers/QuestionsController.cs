@@ -78,5 +78,65 @@ namespace API.Controllers
 
 			}
 		}
+
+		[HttpDelete]
+		[Route("api/questions/deleteQuestion/{identifier}")]
+		public IHttpActionResult deleteQuestion(string identifier)
+		{
+			MySqlConnection conn = WebApiConfig.conn();
+			MySqlCommand query = conn.CreateCommand();
+			conn.Open();
+
+			query.CommandText = "DELETE FROM QUESTION WHERE identifier = @identifier";
+			query.Parameters.AddWithValue("@identifier", identifier);
+			try
+			{
+				query.ExecuteNonQuery();
+				conn.Close();
+				return Ok();
+			}
+			catch (MySql.Data.MySqlClient.MySqlException ex)
+			{
+				conn.Close();
+				return BadRequest();
+			}
+		}
+
+		/*
+		[HttpPost]
+		[Route("api/questions/changeQuestionInformation")]
+		public IHttpActionResult changeQuestionInformation([FromBody] Question question)
+		{
+			MySqlConnection conn = WebApiConfig.conn();
+			MySqlCommand query = conn.CreateCommand();
+			conn.Open();
+
+			query.CommandText = "UPDATE QUESTION SET statement=@statement, alt_a=@alt_a, alt_b=@alt_b, alt_c=@alt_c, alt_d=@alt_d, alt_e=@alt_e, answer=@answer, second_statement=@second_statement, category=@category) where identifier=@identifier;";
+			query.Parameters.AddWithValue("@statement", question.statement);
+			query.Parameters.AddWithValue("@alt_a", question.alt_a);
+			query.Parameters.AddWithValue("@alt_b", question.alt_b);
+			query.Parameters.AddWithValue("@alt_c", question.alt_c);
+			query.Parameters.AddWithValue("@alt_d", question.alt_d);
+			query.Parameters.AddWithValue("@alt_e", question.alt_e);
+			query.Parameters.AddWithValue("@answer", question.answer);
+			query.Parameters.AddWithValue("@identifier", question.identifier);
+			query.Parameters.AddWithValue("@second_statement", question.second_statement);
+			query.Parameters.AddWithValue("@category", question.category);
+
+			try
+			{
+				query.ExecuteNonQuery();
+				conn.Close();
+
+				return Ok();
+
+			}
+			catch (MySql.Data.MySqlClient.MySqlException ex)
+			{
+				conn.Close();
+				return BadRequest();
+
+			}
+		}*/
 	}
 }

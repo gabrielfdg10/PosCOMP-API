@@ -12,14 +12,14 @@ create table user(
  create table question(
      id integer auto_increment not null,
      statement varchar(512) not null,
-     category integer not null, // 0 math, 1 fund, 2 tech
+     identifier varchar(256),
      alt_a varchar(256) not null,
      alt_b varchar(256) not null,
      alt_c varchar(256) not null,
      alt_d varchar(256) not null,
      alt_e varchar(256) not null,
      answer varchar(256) not null,
-     img_link varchar(256),
+     category varchar(10),
      primary key(id)
      );
 

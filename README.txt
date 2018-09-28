@@ -1,29 +1,65 @@
-Retorna todos os usuários
+--------------USUï¿½RIOS-----------------------------------------
+Retorna todos os usuï¿½rios
 GET http://localhost:60996/api/users/getUsers
-Retorna ok se houver credenciais de login válidas
+Retorna ok se houver credenciais de login vï¿½lidas
 GET http://localhost:60996/api/users/logInUser/{login}/{senha}
-Cadastra novo usuário
+Cadastra novo usuï¿½rio
 POST http://localhost:60996/api/users/newUser/
 *requer objeto do tipo:
 {
-	
-    
 	"id": 0,
 	"member_since": "27/09/2018 22:01:45",
-   
 	"email": "mas@outlook.com",
     "real_name": 
 	"Maria Abadia da Silva",
-    
-	"institution": "Universidade Federal de Uberlândia",
-   
+	"institution": "Universidade Federal de Uberlï¿½ndia",
 	"username": "mabadiasilva",
-    
 	"password": "biscoito123"
-
 }
-Remove usuário
+Remove usuï¿½rio
 DELETE http://localhost:60996/api/users/deleteUser/{id}
-Altera informações de usuário
+Altera informaï¿½ï¿½es de usuï¿½rio
 POST http://localhost:60996/api/users/changeUserInformation/
 *requer mesmo objeto de cadastro
+
+--------------QUESTï¿½ES-----------------------------------------
+Retorna questï¿½es por tipo: fund, math ou tech
+GET http://localhost:60996/api/questions/getQuestionsByClass/{category}
+Insere novas questï¿½es
+POST http://localhost:60996/api/questions/newQuestion
+*requer objeto do tipo:
+ {
+	"id": 0,
+	"statement": "Sobre ï¿½rvores binï¿½rias, ï¿½ correto afirmar que:",
+	"alt_a": "ï¿½ uma ï¿½rvore em que todo nï¿½ interno contï¿½m um registro e, para cada nï¿½, a seguinte propriedade ï¿½ verdadeira: todos os registros com chaves menores estï¿½o na subï¿½rvore esquerda e todos os registros com chaves maiores estï¿½o na subï¿½rvore direita.",
+	"alt_b": "A altura de um nï¿½ ï¿½ o comprimento do caminho mais longo deste nï¿½ atï¿½ um nï¿½ folha. A altura de uma ï¿½rvore ï¿½ a altura do nï¿½ raiz.",
+	"alt_c": "Se o nï¿½vel do nï¿½ raiz de uma ï¿½rvore binï¿½ria ï¿½ zero; se um nï¿½ estï¿½ no nï¿½vel i, a raiz de suas duas subï¿½rvores estï¿½ no nï¿½vel i+2.",
+	"alt_d": "O nï¿½mero de subï¿½rvores de um nï¿½ ï¿½ chamado de grau. Um nï¿½ de grau dois ï¿½ chamado de nï¿½ externo ou nï¿½ folha.",
+	"alt_e": "Para encontrar um registro que contï¿½m a chave x em uma ï¿½rvore binï¿½ria de pesquisa, primeiro compare-a com a chave que estï¿½ na raiz. Se ï¿½ menor, vï¿½ para a subï¿½rvore da direita; se ï¿½ maior, vï¿½ para a subï¿½rvore da esquerda.",
+	"answer": "B",
+	"identifier": "fund_2018_24",
+	"category": "fund",
+	"second_statement": ""
+}
+Remove questÃ£o por identificador
+DELETE http://localhost:60996/api/questions/deleteQuestion/{identifier}
+
+---------------SIMULADOS---------------------------------------------------
+Retorna simulados por id de usuÃ¡rio
+GET http://localhost:60996/api/tests/getTestByUser/{id}
+Salva novo simulado
+POST http://localhost:60996/api/tests/newTest
+*requer objeto do tipo
+{
+	"user_id": 1,
+	"id": 0,
+	"timestart": "26/09/2018 15:45",
+	"timeend": "26/09/2018 17:00",
+	"math_number_questions": 25,
+	"fund_number_questions": 25,
+	"tech_number_questions": 25,
+	"math_correct_answers": 20,
+	"fund_correct_answers": 20,
+	"tech_correct_answers": 20,
+	"accuracy": 0.8
+}

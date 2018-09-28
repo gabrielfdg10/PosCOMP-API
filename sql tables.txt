@@ -19,7 +19,7 @@ create table user(
      alt_d varchar(256) not null,
      alt_e varchar(256) not null,
      answer varchar(256) not null,
-     img_link varchar(256),
+     category varchar(10),
      primary key(id)
      );
 
