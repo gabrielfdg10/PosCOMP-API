@@ -103,9 +103,39 @@ namespace API.Controllers
 			}
 		}
 
+		[HttpPost]
+		[Route("api/users/changeUserInformation")]
+		public IHttpActionResult changeUserInformation ([FromBody] User user)
+		{
+			MySqlConnection conn = WebApiConfig.conn();
+			MySqlCommand query = conn.CreateCommand();
+			conn.Open();
+			query.CommandText = "UPDATE USER SET email=@email, password=@password, real_name=@real_name, institution=@institution WHERE id=@id;";
+			query.Parameters.AddWithValue("@id", user.id);
+			query.Parameters.AddWithValue("@email", user.email);
+			query.Parameters.AddWithValue("@password", user.password);
+			query.Parameters.AddWithValue("@real_name", user.real_name);
+			query.Parameters.AddWithValue("@institution", user.institution);
+			try
+			{
+				query.ExecuteNonQuery();
+				conn.Close();
+		
+				return Ok();
+
+			}
+			catch (MySql.Data.MySqlClient.MySqlException ex)
+			{
+				conn.Close();
+				return BadRequest();
+
+			}
+		}
+		
+
 
 		[HttpDelete]
-		[Route("api/users/deleteUser")]
+		[Route("api/users/deleteUser/{id}")]
 		public IHttpActionResult deleteUser(int id)
 		{
 			MySqlConnection conn = WebApiConfig.conn();
