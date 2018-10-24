@@ -42,3 +42,6 @@ c:\users\gabri\onedrive\documents\visual studio 2015\Projects\API\API\obj\Debug\
 C:\Users\gabri\OneDrive\Documents\Visual Studio 2015\Projects\API\API\bin\MySql.Data.dll
 C:\Users\gabri\OneDrive\Documents\Visual Studio 2015\Projects\API\API\bin\Google.Protobuf.dll
 C:\Users\gabri\OneDrive\Documents\Visual Studio 2015\Projects\API\API\bin\MySql.Data.xml
+C:\Users\gabri\OneDrive\Documents\Visual Studio 2015\Projects\API\API\bin\System.Web.Cors.dll
+C:\Users\gabri\OneDrive\Documents\Visual Studio 2015\Projects\API\API\bin\System.Web.Http.Cors.dll
+C:\Users\gabri\OneDrive\Documents\Visual Studio 2015\Projects\API\API\bin\System.Web.Http.Cors.xml

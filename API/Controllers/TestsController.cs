@@ -6,10 +6,11 @@ using System.Net.Http;
 using System.Web.Http;
 using MySql.Data.MySqlClient;
 using API.Models;
+using System.Web.Http.Cors;
 
 namespace API.Controllers
 {
-    public class TestsController : ApiController
+	public class TestsController : ApiController
     {
 		[HttpGet]
 		[Route("api/tests/getTestByUser/{user_id}")]

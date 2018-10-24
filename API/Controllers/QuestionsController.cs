@@ -6,10 +6,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using MySql.Data.MySqlClient;
+using System.Web.Http.Cors;
 
 namespace API.Controllers
 {
-    public class QuestionsController : ApiController
+	public class QuestionsController : ApiController
     {
 
 		[HttpGet]
