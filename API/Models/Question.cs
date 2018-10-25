@@ -18,11 +18,13 @@ namespace API.Models
 		public string identifier { get; set; }
 		public string category { get; set; }
 		public string second_statement { get; set; }
+		public string url { get; set; }
 
 		public Question(int id, string statement, string alt_a,
 						string alt_b, string alt_c, string alt_d,
 						string alt_e, string answer, string identifier,
-						string category, string second_statement)
+						string category, string second_statement,
+						string url)
 		{
 			this.id = id;
 			this.statement = statement;
@@ -35,6 +37,7 @@ namespace API.Models
 			this.identifier = identifier;
 			this.category = category;
 			this.second_statement = second_statement;
+			this.url = url;
 		}
 	}
 }

@@ -14,10 +14,11 @@ namespace API.Controllers
     {
 
 		[HttpGet]
-		[Route("api/questions/getQuestionsByClass/{c}")]
-		public List <Question> getQuestions(string c)
+		[Route("api/questions/getQuestionsByClass/{c}/{q}")]
+		public List <Question> getQuestions(string c, int q)
 		{
 			List<Question> results = new List<Question>();
+			List<Question> finalResults = new List<Question>();
 
 			MySqlConnection conn = WebApiConfig.conn();
 			MySqlCommand query = conn.CreateCommand();
@@ -39,9 +40,19 @@ namespace API.Controllers
 									fetch["alt_c"].ToString(), fetch["alt_d"].ToString(),
 									fetch["alt_e"].ToString(), fetch["answer"].ToString(),
 									fetch["identifier"].ToString(), fetch["category"].ToString(),
-									fetch["second_statement"].ToString()));
+									fetch["second_statement"].ToString(), fetch["url"].ToString()));
 			}
-			return results;
+
+			Random random = new Random();
+			for (int i = 0; i < q; i++)
+			{
+				int index = random.Next(results.Count);
+				Question quest = results[index];
+				results.RemoveAt(index);
+				finalResults.Add(quest);
+			}
+
+			return finalResults;
 		}
 
 		[HttpPost]
@@ -52,7 +63,7 @@ namespace API.Controllers
 			MySqlCommand query = conn.CreateCommand();
 			conn.Open();
 
-			query.CommandText = "INSERT into QUESTION (statement, alt_a, alt_b, alt_c, alt_d, alt_e, answer, identifier, second_statement, category) values (@statement, @alt_a, @alt_b, @alt_c, @alt_d, @alt_e, @answer, @identifier, @second_statement, @category);";
+			query.CommandText = "INSERT into QUESTION (statement, alt_a, alt_b, alt_c, alt_d, alt_e, answer, identifier, second_statement, category, url) values (@statement, @alt_a, @alt_b, @alt_c, @alt_d, @alt_e, @answer, @identifier, @second_statement, @category, @url);";
 			query.Parameters.AddWithValue("@statement", question.statement);
 			query.Parameters.AddWithValue("@alt_a", question.alt_a);
 			query.Parameters.AddWithValue("@alt_b", question.alt_b);
@@ -63,6 +74,8 @@ namespace API.Controllers
 			query.Parameters.AddWithValue("@identifier", question.identifier);
 			query.Parameters.AddWithValue("@second_statement", question.second_statement);
 			query.Parameters.AddWithValue("@category", question.category);
+			query.Parameters.AddWithValue("@url", question.url);
+
 
 			try
 			{

@@ -34,7 +34,9 @@ namespace API.Controllers
 			while (fetch.Read())
 			{
 				results.Add(new QuestionOnTest(Int32.Parse(fetch["test_id"].ToString()),
-												Int32.Parse(fetch["question_id"].ToString())));
+												Int32.Parse(fetch["question_id"].ToString()),
+												Int32.Parse(fetch["correct"].ToString()) 
+											));
 			}
 			return results;
 		}
@@ -61,35 +63,39 @@ namespace API.Controllers
 			while (fetch.Read())
 			{
 				results.Add(new QuestionOnTest(Int32.Parse(fetch["test_id"].ToString()),
-												Int32.Parse(fetch["question_id"].ToString())));
+												Int32.Parse(fetch["question_id"].ToString()),
+												Int32.Parse(fetch["correct"].ToString())
+												));
 			}
 			return results;
 		}
 
 		[HttpPost]
-		[Route("api/qot/newRelation/{test_id}/{question_id}")]
-		public IHttpActionResult newUser(string test_id, string question_id)
+		[Route("api/qot/newRelation")]
+		public string newUser([FromBody] QuestionOnTest qot)
 		{
 			MySqlConnection conn = WebApiConfig.conn();
 			MySqlCommand query = conn.CreateCommand();
 			conn.Open();
 
-			query.CommandText = "INSERT into question_on_test (test_id, question_id) values (@test_id, @question_id);";
-			query.Parameters.AddWithValue("@test_id", test_id);
-			query.Parameters.AddWithValue("@question_id", question_id);
+			query.CommandText = "INSERT into question_on_test (test_id, question_id, correct) values (@test_id, @question_id, @correct);";
+			query.Parameters.AddWithValue("@test_id", qot.test_id);
+			query.Parameters.AddWithValue("@question_id", qot.question_id);
+			query.Parameters.AddWithValue("@correct", qot.correct);
+
 
 			try
 			{
 				query.ExecuteNonQuery();
 				conn.Close();
 
-				return Ok();
+				return "certo";
 
 			}
 			catch (MySql.Data.MySqlClient.MySqlException ex)
 			{
 				conn.Close();
-				return BadRequest();
+				return "erro";
 
 			}
 		}

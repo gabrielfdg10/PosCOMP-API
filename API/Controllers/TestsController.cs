@@ -43,20 +43,22 @@ namespace API.Controllers
 									Int32.Parse(fetch["math_correct_answers"].ToString()),
 									Int32.Parse(fetch["fund_correct_answers"].ToString()),
 									Int32.Parse(fetch["tech_correct_answers"].ToString()),
-									double.Parse(fetch["accuracy"].ToString()) ));
+									double.Parse(fetch["accuracy"].ToString()), fetch["type"].ToString()
+									));
 			}
 			return results;
 		}
 
+
 		[HttpPost]
 		[Route("api/tests/newTest")]
-		public IHttpActionResult newTest([FromBody] Test test)
+		public int newTest([FromBody] Test test)
 		{
 			MySqlConnection conn = WebApiConfig.conn();
 			MySqlCommand query = conn.CreateCommand();
 			conn.Open();
 
-			query.CommandText = "INSERT into test (user_id, timestart, timeend, math_number_questions, fund_number_questions, tech_number_questions, math_correct_answers, fund_correct_answers, tech_correct_answers, accuracy) values (@user_id, @timestart, @timeend, @math_number_questions, @fund_number_questions, @tech_number_questions, @math_correct_answers, @fund_correct_answers, @tech_correct_answers, @accuracy);";
+			query.CommandText = "INSERT into test (user_id, timestart, timeend, math_number_questions, fund_number_questions, tech_number_questions, math_correct_answers, fund_correct_answers, tech_correct_answers, accuracy, type) values (@user_id, @timestart, @timeend, @math_number_questions, @fund_number_questions, @tech_number_questions, @math_correct_answers, @fund_correct_answers, @tech_correct_answers, @accuracy, @type);";
 			query.Parameters.AddWithValue("@user_id", test.user_id);
 			query.Parameters.AddWithValue("@timestart", test.timestart);
 			query.Parameters.AddWithValue("@timeend", test.timeend);
@@ -67,19 +69,22 @@ namespace API.Controllers
 			query.Parameters.AddWithValue("@fund_correct_answers", test.fund_correct_answers);
 			query.Parameters.AddWithValue("@tech_correct_answers", test.tech_correct_answers);
 			query.Parameters.AddWithValue("@accuracy", test.accuracy);
+			query.Parameters.AddWithValue("@type", test.type);
+
 
 			try
 			{
 				query.ExecuteNonQuery();
 				conn.Close();
-
-				return Ok();
+				List<Test> ans = new List<Test>();
+				ans = this.getTestByUser(test.user_id);
+				return ans[ans.Count-1].id;
 
 			}
 			catch (MySql.Data.MySqlClient.MySqlException ex)
 			{
 				conn.Close();
-				return BadRequest();
+				return -1;
 
 			}
 		}

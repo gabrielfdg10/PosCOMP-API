@@ -18,6 +18,7 @@ namespace API.Models
 		public int fund_correct_answers { get; set; }
 		public int tech_correct_answers { get; set; }
 		public double accuracy { get; set; }
+		public string type { get; set;  }
 
 		public Test(int id, int user_id, 
 					string timestart,
@@ -28,7 +29,8 @@ namespace API.Models
 					int math_correct_answers,
 					int fund_correct_answers,
 					int tech_correct_answers,
-					double accuracy)
+					double accuracy,
+					string type)
 		{
 			this.id = id;
 			this.user_id = user_id;
@@ -41,6 +43,7 @@ namespace API.Models
 			this.fund_correct_answers = fund_correct_answers;
 			this.tech_correct_answers = tech_correct_answers;
 			this.accuracy = accuracy;
+			this.type = type;
 		}
 	}
 }
