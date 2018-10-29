@@ -40,6 +40,52 @@ namespace API.Controllers
 			}
 			return results;
 		}
+		
+		[HttpGet]
+		[Route("api/users/getUsersStats/{id}")]
+		public Stats UserStats(int id)
+		{
+			QoTController qotController = new QoTController();
+			TestsController testsController = new TestsController();
+			List<QuestionOnTest> qotList = new List<QuestionOnTest>();
+			List<Test> testList = new List<Test>();
+			Stats userStats = new Stats(id, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+			testList = testsController.getTestByUser(id);
+			for(int i = 0; i < testList.Count; i++)
+			{
+				userStats.test_made++;
+				switch (testList[i].type)
+				{
+					case "Simulado Personalizado":
+						userStats.custom_test++;
+						break;
+					case "Simulado Aleatório":
+						userStats.random_test++;
+						break;
+
+				}
+				qotList = qotController.getRelationsByTestId(testList[i].id);
+				for(int j = 0; j < qotList.Count; j++)
+				{
+					switch (qotList[j].question_type)
+					{
+						case "math":
+							userStats.math_ans++;
+							if (qotList[j].correct == 1) userStats.math_cor++;
+							break;
+						case "tech":
+							userStats.tech_ans++;
+							if (qotList[j].correct == 1) userStats.tech_cor++;
+							break;
+						case "fund":
+							userStats.fund_ans++;
+							if (qotList[j].correct == 1) userStats.fund_cor++;
+							break;
+					}
+				}
+			}
+			return userStats;
+		}
 
 		[HttpGet]
 		[Route("api/users/logInUser/{username}/{password}")]
